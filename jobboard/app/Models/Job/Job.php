@@ -2,12 +2,10 @@
 
 namespace App\Models\Job;
 
-use Illuminate\Database\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-    use HasFactory;
 
     protected $table = 'jobs';
 
@@ -15,6 +13,7 @@ class Job extends Model
         'id',
         'job_title',
         'job_region',
+        'company',
         'job_type',
         'vacancy',
         'experience',
