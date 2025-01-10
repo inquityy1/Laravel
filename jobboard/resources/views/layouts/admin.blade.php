@@ -24,12 +24,12 @@
         @auth('admin')
         <ul class="navbar-nav side-nav" >
           <li class="nav-item">
-            <a class="nav-link text-white" style="margin-left: 20px;" href="index.html">Home
+            <a class="nav-link text-white" style="margin-left: 20px;" href="{{ route('admins.dashboard') }}">Home
               <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="admins/admins.html" style="margin-left: 20px;">Admins</a>
+            <a class="nav-link" href="{{ route('view.admins') }}" style="margin-left: 20px;">Admins</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="categories-admins/show-categories.html" style="margin-left: 20px;">Categories</a>
@@ -45,14 +45,14 @@
         <ul class="navbar-nav ml-md-auto d-md-flex">
             @auth('admin')
           <li class="nav-item">
-            <a class="nav-link" href="index.html">Home
+            <a class="nav-link" href="{{ route('admins.dashboard') }}">Home
               <span class="sr-only">(current)</span>
             </a>
           </li>
           
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {{ Auth::guard('admin')->user()->email }}
+              {{ Auth::guard('admin')->user()->name }}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{{ route('logout') }}"
@@ -61,14 +61,14 @@
                     Logout
                 </a>
 
-                <form id="logout-form" action="" method="POST" class="d-none">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
                 </form>
             </div>
           </li>
             @else
           <li class="nav-item">
-            <a class="nav-link" href="admins/login-admins.html">login
+            <a class="nav-link" href="{{ route('view.login') }}">login
               <span class="sr-only">(current)</span>
             </a>
           </li>
