@@ -9,6 +9,7 @@ use App\Models\Job\Job;
 use App\Models\Category\Category;
 use App\Models\Job\Application;
 use Illuminate\Support\Facades\Hash;
+use File;
 
 class AdminsController extends Controller
 {
@@ -140,6 +141,84 @@ class AdminsController extends Controller
 
         if($deleteCategory) {
             return redirect('admin/display-categories')->with('delete', 'Category deleted successfully');
+        }
+    }
+
+    public function allJobs() {
+
+        $jobs = Job::all();
+
+        return view("admins.all-jobs", compact('jobs'));
+    }
+    
+    public function createJobs() {
+
+        $categories = Category::all();
+        return view("admins.create-jobs", compact('categories'));
+    }
+
+    public function storeJobs(Request $request) {
+
+        Request()->validate([
+            "job_title" => "required",
+            "job_region" => "required",
+            "company" => "required",
+            "job_type" => "required",
+            "vacancy" => "required",
+            "experience" => "required",
+            "salary" => "required",
+            "gender" => "required",
+            "application_deadline" => "required",
+            "jobdescription" => "required",
+            "responsibilities" => "required",
+            "education_experience" => "required",
+            "other_benefits" => "required",
+            "category" => "required",
+            "image" => "required",
+        ]);
+
+        $destinationPath = 'assets/images/';
+        $myimage = $request->image->getClientOriginalName();
+        $request->image->move(public_path($destinationPath), $myimage);
+
+        $createJobs = Job::create([
+            'job_title' => $request->job_title,
+            'job_region' => $request->job_region,
+            'company' => $request->company,
+            'job_type' => $request->job_type,
+            'vacancy' => $request->vacancy,
+            'experience' => $request->experience,
+            'salary' => $request->salary,
+            'gender' => $request->gender,
+            'application_deadline' => $request->application_deadline,
+            'jobdescription' => $request->jobdescription,
+            'responsibilities' => $request->responsibilities,
+            'education_experience' => $request->education_experience,
+            'other_benefits' => $request->other_benefits,
+            'category' => $request->category,
+            'image' => $myimage,
+        ]);
+
+
+        if($createJobs) {
+            return redirect('admin/display-jobs')->with('create', 'Job created successfully');
+        }
+    }
+
+    public function deleteJobs($id) {
+
+        $deleteJobs = Job::find($id);
+
+        if(File::exists(public_path('assets/images/' . $deleteJobs->image))){
+            File::delete(public_path('assets/images/' . $deleteJobs->image));
+        }else {
+            //dd('FIle does not exists.');
+        }
+
+        $deleteJobs->delete();
+
+        if($deleteJobs) {
+            return redirect('admin/display-jobs')->with('delete', 'Job deleted successfully');
         }
     }
 }
