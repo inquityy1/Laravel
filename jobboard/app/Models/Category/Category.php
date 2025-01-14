@@ -11,7 +11,7 @@ class Category extends Model
 
     protected $fillable = [
         'id',
-        'job_title',
+        'name',
         'created_at',
         'updated_at',
     ];

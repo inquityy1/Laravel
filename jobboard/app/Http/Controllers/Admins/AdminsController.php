@@ -61,6 +61,12 @@ class AdminsController extends Controller
 
     public function storeAdmins(Request $request) {
 
+        Request()->validate([
+            "name" => "required|max:40",
+            "email" => "required|max:40",
+            "password" => "required",
+        ]);
+
         $createAdmin = Admin::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -70,6 +76,70 @@ class AdminsController extends Controller
 
         if($createAdmin) {
             return redirect('admin/all-admins')->with('create', 'Admin created successfully');
+        }
+    }
+    
+    public function displayCategories() {
+
+        $categories = Category::all();
+
+        return view("admins.display-categories", compact('categories'));
+    }
+
+    public function createCategories() {
+
+
+
+        return view("admins.create-categories");
+    }
+    
+    public function storeCategories(Request $request) {
+        
+        Request()->validate([
+            "name" => "required|max:40",
+        ]);
+        
+        $createCategory = Category::create([
+            'name' => $request->name,
+        ]);
+        
+        
+        if($createCategory) {
+            return redirect('admin/display-categories')->with('create', 'Category created successfully');
+        }
+    }
+
+    public function editCategories($id) {
+
+        $category = Category::find($id);
+
+        return view("admins.edit-categories", compact('category'));
+    }
+    
+    public function updateCategories(Request $request, $id) {
+        
+        Request()->validate([
+            "name" => "required|max:40",
+        ]);
+        
+        $categoryUpdate = Category::find($id);
+        $categoryUpdate->update([
+            'name' => $request->name,
+        ]);
+        
+        
+        if($categoryUpdate) {
+            return redirect('admin/display-categories')->with('update', 'Category updated successfully');
+        }
+    }
+
+    public function deleteCategories($id) {
+
+        $deleteCategory = Category::find($id);
+        $deleteCategory->delete();
+
+        if($deleteCategory) {
+            return redirect('admin/display-categories')->with('delete', 'Category deleted successfully');
         }
     }
 }
