@@ -10,6 +10,7 @@ use App\Models\Job\JobSaved;
 use App\Models\Job\Application;
 use App\Models\Job\Search;
 use Auth;
+use DB;
 
 
 class JobsController extends Controller
@@ -37,7 +38,15 @@ class JobsController extends Controller
 
         
         //categories
-        $categories = Category::all();
+        $categories = DB::table('categories')
+          ->join('jobs', 'jobs.category', '=', 'categories.name')
+          ->select(
+              'categories.name AS name',
+              'categories.id AS id',
+              DB::raw('COUNT(jobs.category) as total')
+          )
+          ->groupBy('categories.name', 'categories.id')
+          ->get();
 
         //save job
         if(auth()->user()) {
@@ -78,7 +87,7 @@ class JobsController extends Controller
 
     public function jobApply(Request $request) {
 
-        if($request->cv == 'No cv') {
+        if(Auth::user()->cv == 'No cv') {
             return redirect('/jobs/single/'.$request->job_id.'')->with('apply', 'upload youre CV first in the profile page');
         } else {
             $applyJob = Application::create([
