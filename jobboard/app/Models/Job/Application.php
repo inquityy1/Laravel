@@ -17,7 +17,8 @@ class Application extends Model
         'job_region',
         'company',
         'job_type',
-        'job_id'
+        'job_id',
+        'email',
     ];
 
     public $timestamp = true;

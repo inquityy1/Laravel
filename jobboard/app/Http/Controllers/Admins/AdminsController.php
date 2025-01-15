@@ -221,4 +221,21 @@ class AdminsController extends Controller
             return redirect('admin/display-jobs')->with('delete', 'Job deleted successfully');
         }
     }
+
+    public function displayApps() {
+
+        $apps = Application::all();
+
+        return view("admins.all-apps", compact('apps'));
+    }
+
+    public function deleteApps($id) {
+
+        $deleteApp = Application::find($id);
+        $deleteApp->delete();
+
+        if($deleteApp) {
+            return redirect('admin/display-apps')->with('delete', 'Application deleted successfully');
+        }
+    }
 }
